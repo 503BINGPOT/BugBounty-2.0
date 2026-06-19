@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+body {
+  background: #000;
+  color: white;
+  font-family: Inter, sans-serif;
+}
+
+/* GLOBAL WEBSITE BACKGROUND */
+.app-background {
+  position: relative;
+  min-height: 100vh;
+  background: #000;
+  overflow: hidden;
+}
+
+/* DOT GRID */
+.app-background::before {
+
+  content: "";
+
+  position: absolute;
+  inset: 0;
+
+  background-image:
+    radial-gradient(
+      rgba(255,255,255,0.12) 0.5px,
+      transparent 0.5px
+    );
+
+  background-size: 22px 22px;
+
+  opacity: 0.25;
+
+  pointer-events: none;
+}
