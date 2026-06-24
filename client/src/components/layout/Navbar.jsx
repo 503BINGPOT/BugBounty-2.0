@@ -1,4 +1,5 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
+import axios from "axios";
 
 import {
   Link,
@@ -18,7 +19,19 @@ import {
   logout,
 } from "../../utils/auth";
 
+
 const Navbar = () => {
+
+  const notificationRef =
+  useRef(null);
+
+  const [notifications,
+  setNotifications] =
+  useState([]);
+
+const [showNotifications,
+  setShowNotifications] =
+  useState(false);
 
   const location = useLocation();
 
@@ -32,25 +45,91 @@ const Navbar = () => {
     useState(false);
 
   const navItems = [
-    {
-      name: "Bounties",
-      path: "/bounties",
-    },
-    {
-      name: "Dashboard",
-      path: "/dashboard",
-    },
-    {
-      name: "Wallet",
-      path: "/wallet",
-    },
-  ];
+  {
+    name: "Dashboard",
+    path: "/dashboard",
+  },
+  {
+    name: "Bounties",
+    path: "/bounties",
+  },
+  {
+    name: "Repositories",
+    path: "/repositories",
+  },
+];
 
   useEffect(() => {
 
     setMenuOpen(false);
 
   }, [location.pathname]);
+
+  useEffect(() => {
+
+  if (!user) return;
+
+  const fetchNotifications =
+    async () => {
+
+      try {
+
+        const response =
+          await axios.get(
+            `http://localhost:5000/api/notifications/${user.id}`
+          );
+
+        setNotifications(
+          response.data
+        );
+
+      } catch (error) {
+
+        console.log(error);
+
+      }
+
+    };
+
+  fetchNotifications();
+
+}, []);
+
+useEffect(() => {
+
+  const handleClickOutside =
+    (event) => {
+
+      if (
+        notificationRef.current &&
+        !notificationRef.current.contains(
+          event.target
+        )
+      ) {
+
+        setShowNotifications(
+          false
+        );
+
+      }
+
+    };
+
+  document.addEventListener(
+    "mousedown",
+    handleClickOutside
+  );
+
+  return () => {
+
+    document.removeEventListener(
+      "mousedown",
+      handleClickOutside
+    );
+
+  };
+
+}, []);
 
   const handleLogout = () => {
 
@@ -61,6 +140,8 @@ const Navbar = () => {
     });
 
   };
+
+  
 
   return (
 
@@ -232,41 +313,137 @@ const Navbar = () => {
             >
 
               {/* BELL */}
-              <button
-                className="
-                  text-gray-500
-                  hover:text-white
-                  transition
-                "
-              >
-                <Bell size={18} />
-              </button>
+              <div
+  ref={notificationRef}
+  className="relative"
+>
+
+  <button
+    onClick={() =>
+      setShowNotifications(
+        !showNotifications
+      )
+    }
+  >
+  {notifications.length > 0 && (
+
+  <span
+    className="
+      absolute
+      -top-2
+      -right-2
+      bg-red-500
+      text-white
+      text-[10px]
+      w-4
+      h-4
+      rounded-full
+      flex
+      items-center
+      justify-center
+    "
+  >
+    {notifications.length}
+  </span>
+
+)}
+    <Bell size={18} />
+  </button>
+
+{showNotifications && (
+
+  <div
+    className="
+      absolute
+      right-0
+      top-10
+      w-80
+      bg-black
+      border border-white/10
+      rounded-xl
+      p-4
+      z-50
+    "
+  >
+
+    <h3 className="mb-3 font-medium">
+      Notifications
+    </h3>
+
+    {notifications.length === 0 ? (
+
+      <p className="text-gray-500">
+        No notifications
+      </p>
+
+    ) : (
+
+      notifications.map(
+
+        notification => (
+
+          <div
+            key={notification.id}
+            className="
+              border-b
+              border-white/10
+              py-3
+            "
+          >
+
+            <p className="text-sm">
+              {notification.message}
+            </p>
+
+          </div>
+
+        )
+
+      )
+
+    )}
+
+  </div>
+
+)}
+
+</div>
 
               {/* USER */}
-              <div
-                className="
-                  flex items-center gap-2
-                "
-              >
+<Link
+  to="/profile"
+  className="
+    flex items-center gap-2
+    hover:opacity-80
+    transition
+  "
+>
 
-                <div
-                  className="
-                    w-8 h-8
-                    rounded-full
-                    bg-blue-500
-                  "
-                />
+  <img
+    src={
+      user?.avatar ||
+      "https://github.com/github.png"
+    }
+    alt="avatar"
+    className="
+      w-8 h-8
+      rounded-full
+      object-cover
+    "
+  />
 
-                <span
-                  className="
-                    text-[14px]
-                    text-gray-200
-                  "
-                >
-                  {user?.username}
-                </span>
+  <span
+    className="
+      text-[14px]
+      text-gray-200
+      hover:text-white
+      transition
+    "
+  >
+    {user?.username}
+  </span>
 
-              </div>
+</Link>
 
               {/* LOGOUT */}
               <button
@@ -359,13 +536,18 @@ const Navbar = () => {
                 "
               >
 
-                <div
-                  className="
-                    w-8 h-8
-                    rounded-full
-                    bg-blue-500
-                  "
-                />
+                <img
+  src={
+    user?.avatar ||
+    "https://github.com/github.png"
+  }
+  alt="avatar"
+  className="
+    w-8 h-8
+    rounded-full
+    object-cover
+  "
+/>
 
                 <span className="text-[14px]">
                   {user?.username}

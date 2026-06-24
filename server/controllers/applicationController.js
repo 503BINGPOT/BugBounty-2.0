@@ -1,6 +1,7 @@
 import pool from "../config/db.js";
 import axios from "axios";
 
+import createNotification from "../utils/createNotification.js";
 /* CREATE APPLICATION */
 export const createApplication = async (
   req,
@@ -39,6 +40,29 @@ export const createApplication = async (
         ]
 
       );
+
+      const bounty =
+  await pool.query(
+
+    `
+    SELECT
+      owner_id,
+      title
+    FROM bounties
+    WHERE id = $1
+    `,
+
+    [bountyId]
+
+  );
+
+      await createNotification(
+
+  bounty.rows[0].owner_id,
+
+  `New application received for "${bounty.rows[0].title}"`
+
+);
 
     res.status(201).json({
 
@@ -238,6 +262,14 @@ export const acceptApplication = async (
 
   }
 
+  await createNotification(
+
+  application.rows[0].applicant_id,
+
+  "Your application has been accepted"
+
+);
+
 };
 
 export const rejectApplication = async (
@@ -275,6 +307,27 @@ export const rejectApplication = async (
 
   }
 
+  const application =
+  await pool.query(
+
+    `
+    SELECT *
+    FROM applications
+    WHERE id = $1
+    `,
+
+    [id]
+
+  );
+
+  await createNotification(
+
+  application.rows[0].applicant_id,
+
+  "Your application has been rejected"
+
+);
+
 };
 
 export const getUserApplications =
@@ -290,15 +343,17 @@ export const getUserApplications =
 
           `
           SELECT
-            applications.*,
-            bounties.title,
-            bounties.reward
+  applications.*,
+  bounties.title,
+  bounties.reward,
+  bounties.github_url,
+  bounties.difficulty
 
-          FROM applications
+FROM applications
 
-          JOIN bounties
-          ON applications.bounty_id =
-             bounties.id
+JOIN bounties
+ON applications.bounty_id =
+   bounties.id
 
           WHERE applicant_id = $1
 

@@ -1,16 +1,17 @@
+import dotenv from "dotenv";
+
 import express from "express";
 import cors from "cors";
-import dotenv from "dotenv";
 import session from "express-session";
 import passport from "passport";
-
 import authRoutes from "./routes/authRoutes.js";
 import bountyRoutes from "./routes/bountyRoutes.js";
-
 import applicationRoutes from "./routes/applicationRoutes.js";
-
-import githubRoutes
-from "./routes/githubRoutes.js";
+import dashboardRoutes from "./routes/dashboardRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
+import githubRoutes from "./routes/githubRoutes.js";
+import paymentRoutes from "./routes/paymentRoutes.js";
+import notificationRoutes from "./routes/notificationRoute.js";
 
 /* LOAD ENV */
 dotenv.config();
@@ -65,6 +66,26 @@ app.get("/", (req, res) => {
 app.use(
   "/api/github",
   githubRoutes
+);
+
+app.use(
+  "/api/dashboard",
+  dashboardRoutes
+);
+
+app.use(
+  "/api/profile",
+  profileRoutes
+);
+
+app.use(
+  "/api/payment",
+  paymentRoutes
+);
+
+app.use(
+  "/api/notifications",
+  notificationRoutes
 );
 
 /* START SERVER */

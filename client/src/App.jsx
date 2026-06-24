@@ -20,6 +20,7 @@ import MyBounties from "./pages/myBounties";
 import ConnectedRepositories from "./pages/connectedRepositories";
 import RepositoryIssues from "./pages/repositoryIssues";
 import AuthSuccess from "./pages/AuthSucess";
+import Profile from "./pages/Profile";
 
 function App() {
 
@@ -102,6 +103,11 @@ function App() {
         <Route
         path="/auth-success"
         element={<AuthSuccess />}
+        />
+
+        <Route
+        path="/profile"
+        element={<Profile />}
         />
         
         </Routes>

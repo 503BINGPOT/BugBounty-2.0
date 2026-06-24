@@ -214,6 +214,94 @@ const handleReject =
 
 };
 
+const handlePayment =
+  async () => {
+
+    try {
+
+      const order =
+        await axios.post(
+
+          "http://localhost:5000/api/payment/create-order",
+
+          {
+            amount:
+              bounty.reward
+          }
+
+        );
+
+      const options = {
+
+       key: import.meta.env.VITE_RAZORPAY_KEY_ID,
+
+        amount:
+          order.data.amount,
+
+        currency:
+          order.data.currency,
+
+        name:
+          "BountyHub",
+
+        description:
+          bounty.title,
+
+        order_id:
+          order.data.id,
+
+        handler:
+          async function (
+            response
+          ) {
+
+            await axios.post(
+
+              "http://localhost:5000/api/payment/verify",
+
+              {
+
+                razorpay_order_id:
+                  response.razorpay_order_id,
+
+                razorpay_payment_id:
+                  response.razorpay_payment_id,
+
+                razorpay_signature:
+                  response.razorpay_signature,
+
+                bountyId:
+                  bounty.id,
+
+              }
+
+            );
+
+            alert(
+              "Payment Successful!"
+            );
+
+            window.location.reload();
+
+          },
+
+      };
+
+      const razorpay =
+        new window.Razorpay(
+          options
+        );
+
+      razorpay.open();
+
+    } catch (error) {
+
+      console.log(error);
+
+    }
+
+  };
+
   return (
 
     <Layout>
@@ -230,15 +318,55 @@ const handleReject =
 
         <div className="flex gap-5 mb-8">
 
-          <span className="text-green-400">
-            ${bounty.reward}
-          </span>
+ <span className="text-green-400">
+  ₹{bounty.reward}
+</span>
 
-          <span>
-            {bounty.difficulty}
-          </span>
+<span>
+  {bounty.difficulty}
+</span>
 
-        </div>
+{bounty.funded ? (
+
+  <span
+    className="
+      bg-green-600
+      px-3 py-1
+      rounded-full
+      text-sm
+    "
+  >
+    Funded 
+  </span>
+
+) : (
+
+  currentUser.id ===
+  bounty.owner_id && (
+
+    <button
+      onClick={handlePayment}
+      className="
+        bg-blue-600
+        px-4 py-1
+        rounded-lg
+      "
+    >
+      Fund Bounty
+    </button>
+
+  )
+
+)}
+</div>
+
+<p className="text-gray-400 text-sm mb-6">
+
+  Payment Status:
+  {" "}
+  {bounty.payment_status || "Pending"}
+
+</p>
 
         <div className="border border-white/10 rounded-xl p-6 mb-6">
 
