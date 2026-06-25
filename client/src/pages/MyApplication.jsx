@@ -9,8 +9,8 @@ const MyApplications = () => {
     setApplications] =
       useState([]);
 
-  const [prUrl, setPrUrl] =
-  useState("");
+const [prUrls, setPrUrls] =
+useState({});
 
   const currentUser =
     JSON.parse(
@@ -24,12 +24,17 @@ const MyApplications = () => {
 
         try {
 
-          const response =
-            await axios.get(
+         const token = localStorage.getItem("token");
 
-              `http://localhost:5000/api/applications/user/${currentUser.id}`
-
-            );
+const response =
+  await axios.get(
+    `http://localhost:5000/api/applications/user/${currentUser.id}`,
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+  );
 
           setApplications(
             response.data
@@ -52,22 +57,38 @@ const MyApplications = () => {
 
     try {
 
-      await axios.put(
+      const token = localStorage.getItem("token");
 
-        "http://localhost:5000/api/applications/submit-pr",
+await axios.put(
 
-        {
-          applicationId,
-          prUrl,
+  "http://localhost:5000/api/applications/submit-pr",
+
+  {
+    applicationId,
+    prUrl: prUrls[applicationId],
+  },
+
+  {
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  }
+
+);
+
+      alert("PR submitted!");
+
+setApplications((prev) =>
+  prev.map((application) =>
+    application.id === applicationId
+      ? {
+          ...application,
+          status: "pr submitted",
+          pr_url: prUrls[applicationId],
         }
-
-      );
-
-      alert(
-        "PR submitted!"
-      );
-
-      window.location.reload();
+      : application
+  )
+);
 
     } catch (error) {
 
@@ -127,15 +148,44 @@ const MyApplications = () => {
                     {application.cover_letter}
                   </p>
 
-                  <p className="mt-4 text-yellow-500">
-                    Status:
-                    {" "}
-                    {application.status}
-                  </p>
+                  <p
+className={`
+mt-4
+font-medium
+
+${
+application.status.toLowerCase() === "pending"
+
+? "text-yellow-500"
+
+: application.status.toLowerCase() === "accepted"
+
+? "text-blue-500"
+
+: application.status.toLowerCase() === "pr submitted"
+
+? "text-purple-500"
+
+: application.status.toLowerCase() === "completed"
+
+? "text-green-500"
+
+: "text-red-500"
+
+}
+
+`}
+>
+
+Status:
+{" "}
+{application.status}
+
+</p>
 
                   {
   application.status ===
-  "Accepted" && (
+  "accepted" && (
 
     <div className="mt-5">
 
@@ -147,13 +197,22 @@ const MyApplications = () => {
 https://github.com/user/repo/pull/12
 "
 
-        value={prUrl}
+value={
+prUrls[application.id] || ""
+}
 
-        onChange={(e) =>
-          setPrUrl(
-            e.target.value
-          )
-        }
+onChange={(e)=>
+
+setPrUrls({
+
+...prUrls,
+
+[application.id]:
+e.target.value
+
+})
+
+}
 
         className="
           w-full
@@ -185,61 +244,67 @@ https://github.com/user/repo/pull/12
         Submit Pull Request
       </button>
 
-      <button
 
-  onClick={
-    async () => {
-
-      try {
-
-        const response =
-          await axios.get(
-
-            `http://localhost:5000/api/applications/check-pr/${application.id}`
-
-          );
-
-        if (
-          response.data.merged
-        ) {
-
-          alert(
-            "PR Merged! Bounty completed."
-          );
-
-        } else {
-
-          alert(
-            "PR not merged yet."
-          );
-
-        }
-
-      } catch (error) {
-
-        console.log(error);
-
-      }
-
-    }
-  }
-
-  className="
-    ml-3
-    bg-green-600
-    px-4 py-2
-    rounded-lg
-  "
-
->
-  Check PR Status
-</button>
 
     </div>
 
   )
 }
 
+{
+application.status.toLowerCase() ===
+"pr submitted" && (
+
+<div className="mt-5">
+
+
+<p className="text-purple-400 mb-3">
+
+Your PR has been submitted.
+
+Waiting for merge.
+
+</p>
+
+{
+application.pr_url && (
+
+<a
+
+href={application.pr_url}
+
+target="_blank"
+
+rel="noreferrer"
+
+className="
+inline-block
+mb-4
+text-blue-400
+hover:underline
+break-all
+"
+
+>
+
+View Your Pull Request
+
+</a>
+
+)
+}
+
+<p className="text-gray-400 mt-4">
+
+Waiting for the project owner to review
+and merge your Pull Request.
+
+</p>
+
+</div>
+
+)
+}
                 </div>
 
               )

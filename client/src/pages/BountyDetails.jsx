@@ -28,6 +28,49 @@ const BountyDetails = () => {
   const [coverLetter, setCoverLetter] =
     useState("");
 
+    const [isEditing, setIsEditing] = useState(false);
+
+const [formData, setFormData] = useState({
+  title: "",
+  description: "",
+  reward: "",
+  difficulty: "",
+  acceptance_criteria: "",
+});
+
+const handleChange = (e) => {
+  setFormData({
+    ...formData,
+    [e.target.name]: e.target.value,
+  });
+};
+
+const handleUpdate = async () => {
+  try {
+    const token = localStorage.getItem("token");
+
+    const response = await axios.put(
+      `http://localhost:5000/api/bounties/${id}`,
+      formData,
+      {
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      }
+    );
+
+    setBounty(response.data);
+
+    setIsEditing(false);
+
+    alert("Bounty updated successfully!");
+
+  } catch (err) {
+    console.log(err);
+    alert("Update failed");
+  }
+};
+
   useEffect(() => {
 
   const fetchData =
@@ -43,6 +86,15 @@ const BountyDetails = () => {
         setBounty(
           bountyResponse.data
         );
+
+        setFormData({
+  title: bountyResponse.data.title,
+  description: bountyResponse.data.description,
+  reward: bountyResponse.data.reward,
+  difficulty: bountyResponse.data.difficulty,
+  acceptance_criteria:
+    bountyResponse.data.acceptance_criteria,
+});
 
         const token =
           localStorage.getItem("token");
@@ -105,23 +157,25 @@ setHasApplied(
 
     try {
 
-      const response =
-        await axios.post(
+      const token = localStorage.getItem("token");
 
-          "http://localhost:5000/api/applications",
+const response =
+  await axios.post(
 
-          {
-            bountyId:
-              bounty.id,
+    "http://localhost:5000/api/applications",
 
-           applicantId:
-            currentUser.id,
+    {
+      bountyId: bounty.id,
+      coverLetter,
+    },
 
-            coverLetter,
-          }
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
 
-        );
-
+  );
       alert(
         "Application submitted!"
       );
@@ -135,6 +189,8 @@ setHasApplied(
       );
 
       setCoverLetter("");
+
+      setHasApplied(true);
 
     } catch (error) {
 
@@ -171,7 +227,21 @@ setHasApplied(
 
       );
 
-      window.location.reload();
+      setApplications((prev) =>
+  prev.map((application) =>
+    application.id === applicationId
+      ? {
+          ...application,
+          status: "accepted",
+        }
+      : application.status === "pending"
+      ? {
+          ...application,
+          status: "rejected",
+        }
+      : application
+  )
+);
 
     } catch (error) {
 
@@ -204,13 +274,84 @@ const handleReject =
 
       );
 
-      window.location.reload();
+      setApplications((prev) =>
+  prev.map((application) =>
+    application.id === applicationId
+      ? {
+          ...application,
+          status: "rejected",
+        }
+      : application
+  )
+);
 
     } catch (error) {
 
       console.log(error);
 
     }
+
+};
+
+const checkPRStatus =
+async (applicationId) => {
+
+  try {
+
+    const token =
+      localStorage.getItem("token");
+
+    const response =
+      await axios.get(
+
+        `http://localhost:5000/api/applications/check-pr/${applicationId}`,
+
+        {
+
+          headers:{
+
+            Authorization:
+            `Bearer ${token}`
+
+          }
+
+        }
+
+      );
+
+   if(response.data.merged){
+
+  alert("PR Merged!");
+
+  setApplications((prev) =>
+    prev.map((application) =>
+      application.id === applicationId
+        ? {
+            ...application,
+            status: "completed",
+          }
+        : application
+    )
+  );
+
+  setBounty((prev) => ({
+    ...prev,
+    status: "completed",
+  }));
+
+}else{
+
+  alert("PR not merged yet.");
+
+}
+
+  }
+
+  catch(error){
+
+    console.log(error);
+
+  }
 
 };
 
@@ -277,11 +418,13 @@ const handlePayment =
 
             );
 
-            alert(
-              "Payment Successful!"
-            );
+            alert("Payment Successful!");
 
-            window.location.reload();
+setBounty((prev) => ({
+  ...prev,
+  funded: true,
+  payment_status: "Completed",
+}));
 
           },
 
@@ -312,52 +455,80 @@ const handlePayment =
           Bounty
         </p>
 
-        <h1 className="text-4xl font-semibold mb-4">
-          {bounty.title}
-        </h1>
-
-        <div className="flex gap-5 mb-8">
-
- <span className="text-green-400">
-  ₹{bounty.reward}
-</span>
-
-<span>
-  {bounty.difficulty}
-</span>
-
-{bounty.funded ? (
-
-  <span
-    className="
-      bg-green-600
-      px-3 py-1
-      rounded-full
-      text-sm
-    "
-  >
-    Funded 
-  </span>
-
-) : (
-
-  currentUser.id ===
-  bounty.owner_id && (
-
-    <button
-      onClick={handlePayment}
-      className="
-        bg-blue-600
-        px-4 py-1
-        rounded-lg
-      "
-    >
-      Fund Bounty
-    </button>
-
+        {
+  isEditing ? (
+    <input
+      name="title"
+      value={formData.title}
+      onChange={handleChange}
+      className="text-4xl font-semibold mb-4"
+    />
+  ) : (
+    <h1>{bounty.title}</h1>
   )
+}
 
-)}
+<div className="flex gap-5 mb-8">
+
+  {
+  isEditing ? (
+    <input
+      type="number"
+      name="reward"
+      value={formData.reward}
+      onChange={handleChange}
+      className="text-green-400"
+    />
+  ) : (
+    <>₹{bounty.reward}</>
+  )
+}
+
+  {
+  isEditing ? (
+    <select
+      name="difficulty"
+      value={formData.difficulty}
+      onChange={handleChange}
+      className="text-yellow-400"
+    >
+      <option>Easy</option>
+      <option>Medium</option>
+      <option>Hard</option>
+    </select>
+  ) : (
+    bounty.difficulty
+  )
+}
+
+  {bounty.funded && (
+    <span className="bg-green-600 px-3 py-1 rounded-full text-sm">
+      Funded
+    </span>
+  )}
+
+  {currentUser.id === bounty.owner_id && (
+    <>
+      {!bounty.funded && (
+        <button
+          onClick={handlePayment}
+          className="bg-blue-600 px-4 py-1 rounded-lg"
+        >
+          Fund Bounty
+        </button>
+      )}
+
+      {!isEditing && (
+        <button
+          onClick={() => setIsEditing(true)}
+          className="bg-yellow-500 text-black px-4 py-1 rounded-lg"
+        >
+          Edit
+        </button>
+      )}
+    </>
+  )}
+
 </div>
 
 <p className="text-gray-400 text-sm mb-6">
@@ -374,9 +545,19 @@ const handlePayment =
             Description
           </h2>
 
-          <p className="text-gray-400 whitespace-pre-wrap">
-            {bounty.description}
-          </p>
+          {
+  isEditing ? (
+    <textarea
+      name="description"
+      value={formData.description}
+      onChange={handleChange}
+      rows={6}
+      className="text-gray-400 whitespace-pre-wrap"
+    />
+  ) : (
+    <p>{bounty.description}</p>
+  )
+}
 
         </div>
 
@@ -386,11 +567,81 @@ const handlePayment =
             Acceptance Criteria
           </h2>
 
-          <p className="text-gray-400 whitespace-pre-wrap">
-            {bounty.acceptance_criteria}
-          </p>
+          {
+isEditing ? (
+
+<textarea
+
+name="acceptance_criteria"
+
+value={formData.acceptance_criteria}
+
+onChange={handleChange}
+
+rows={5}
+
+className="
+w-full
+bg-transparent
+border border-white/10
+rounded-xl
+p-3
+"
+
+ />
+
+)
+
+:
+
+(
+
+<p className="text-gray-400 whitespace-pre-wrap">
+
+{bounty.acceptance_criteria}
+
+</p>
+
+)
+
+}
+
+          
 
         </div>
+
+{
+  isEditing && (
+    <div className="flex gap-4 mt-8">
+
+      <button
+        onClick={handleUpdate}
+        className="bg-green-600 px-5 py-2 rounded-lg"
+      >
+        Save Changes
+      </button>
+
+      <button
+        onClick={() => {
+          setFormData({
+            title: bounty.title,
+            description: bounty.description,
+            reward: bounty.reward,
+            difficulty: bounty.difficulty,
+            acceptance_criteria:
+              bounty.acceptance_criteria,
+          });
+
+          setIsEditing(false);
+        }}
+        className="bg-gray-700 px-5 py-2 rounded-lg"
+      >
+        Cancel
+      </button>
+
+    </div>
+  )
+}
 
        {
   !hasApplied ? (
@@ -527,17 +778,124 @@ why you're a good fit...
             "
           >
 
-            <p className="font-medium">
-              Applicant #{application.applicant_id}
-            </p>
+            <div className="space-y-1">
 
-            <p className="text-gray-400 mt-2">
-              {application.cover_letter}
-            </p>
+  <h3 className="text-lg font-semibold">
 
-            <p className="text-yellow-500 mt-3 text-sm">
-              {application.status}
-            </p>
+    {application.username}
+
+  </h3>
+
+  <p className="text-sm text-gray-400">
+
+    {application.email}
+
+  </p>
+
+</div>
+
+            <div className="mt-5">
+
+<p className="text-sm text-gray-500 mb-2">
+
+Cover Letter
+
+</p>
+
+<p
+className="
+text-gray-300
+leading-7
+"
+>
+
+{application.cover_letter}
+
+</p>
+
+{
+application.pr_url && (
+
+<div className="mt-6">
+
+<p className="text-sm text-gray-500">
+
+Pull Request
+
+</p>
+
+<a
+
+href={application.pr_url}
+
+target="_blank"
+
+rel="noreferrer"
+
+className="
+inline-block
+mt-3
+bg-gray-800
+hover:bg-gray-700
+px-4
+py-2
+rounded-lg
+transition
+"
+
+>
+
+View Pull Request
+
+</a>
+
+</div>
+
+)
+}
+
+</div>
+
+           <div className="mt-4">
+
+<span
+
+className={`
+px-3
+py-1
+rounded-full
+text-xs
+font-semibold
+
+${
+application.status === "Pending"
+
+? "bg-yellow-500/20 text-yellow-400"
+
+: application.status === "Accepted"
+
+? "bg-blue-500/20 text-blue-400"
+
+: application.status === "PR Submitted"
+
+? "bg-purple-500/20 text-purple-400"
+
+: application.status === "Completed"
+
+? "bg-green-500/20 text-green-400"
+
+: "bg-red-500/20 text-red-400"
+}
+
+`}
+
+>
+
+{application.status}
+
+</span>
+
+</div>
 
             {
               application.status ===
@@ -580,6 +938,92 @@ why you're a good fit...
               )
             }
 
+
+{
+application.status ===
+"PR Submitted" && (
+
+<div className="mt-4">
+
+<button
+
+onClick={()=>
+checkPRStatus(
+application.id
+)
+}
+
+className="
+bg-purple-600
+px-4
+py-2
+rounded-lg
+"
+
+>
+
+Check PR Status
+
+</button>
+
+</div>
+
+)
+}
+
+{
+application.status === "Accepted" && (
+
+<div
+className="
+mt-4
+text-blue-400
+font-medium
+"
+>
+
+Waiting for contributor to submit a Pull Request...
+
+</div>
+
+)
+}
+
+{
+application.status === "Completed" && (
+
+<div
+className="
+mt-4
+text-green-400
+font-medium
+"
+>
+
+✅ Pull Request Merged
+
+</div>
+
+)
+}
+
+{
+application.status === "Rejected" && (
+
+<div
+className="
+mt-4
+text-red-400
+font-medium
+"
+>
+
+Application Rejected
+
+</div>
+
+)
+}
           </div>
 
         ))

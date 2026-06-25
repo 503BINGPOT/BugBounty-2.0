@@ -1,13 +1,23 @@
 import pkg from "pg";
+import dotenv from "dotenv";
+
+dotenv.config();
 
 const { Pool } = pkg;
 
 const pool = new Pool({
-  user: "postgres",
-  host: "localhost",
-  database: "BugBounty",
-  password: "EDITH503a",
-  port: 5432,
+  connectionString: process.env.DATABASE_URL,
+  ssl: {
+    rejectUnauthorized: false,
+  },
+});
+
+pool.on("connect", () => {
+  console.log("Connected to Neon");
+});
+
+pool.on("error", (err) => {
+  console.error("Unexpected PostgreSQL error:", err);
 });
 
 export default pool;

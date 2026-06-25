@@ -31,31 +31,32 @@ const PostBounty = () => {
 
   const handleSubmit = async (e) => {
 
-    const user =
-  JSON.parse(
-    localStorage.getItem("user")
-  );
-
 const payload = {
 
   ...formData,
 
-  ownerId: user.id,
-
 };
+
+const token = localStorage.getItem("token");
 
   e.preventDefault();
 
   try {
 
     const response =
-      await axios.post(
+  await axios.post(
 
-        "http://localhost:5000/api/bounties",
+    "http://localhost:5000/api/bounties",
 
-        payload
+    payload,
 
-      );
+    {
+      headers: {
+        Authorization: `Bearer ${token}`,
+      },
+    }
+
+  );
 
     console.log(response.data);
 

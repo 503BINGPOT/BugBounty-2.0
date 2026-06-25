@@ -16,6 +16,7 @@ const router = express.Router();
 
 router.post(
   "/",
+  authMiddleware,
   createApplication
 );
 
@@ -44,11 +45,13 @@ router.get(
 
 router.put(
   "/submit-pr",
+  authMiddleware,
   submitPR
 );
 
 router.get(
   "/check-pr/:applicationId",
+  authMiddleware,
   checkPRStatus
 );
 

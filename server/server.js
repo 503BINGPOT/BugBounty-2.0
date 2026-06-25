@@ -1,4 +1,5 @@
 import dotenv from "dotenv";
+dotenv.config();
 
 import express from "express";
 import cors from "cors";
@@ -14,7 +15,6 @@ import paymentRoutes from "./routes/paymentRoutes.js";
 import notificationRoutes from "./routes/notificationRoute.js";
 
 /* LOAD ENV */
-dotenv.config();
 
 /* LOAD PASSPORT GITHUB STRATEGY */
 await import("./config/githubAuth.js");

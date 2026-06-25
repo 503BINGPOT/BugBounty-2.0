@@ -12,9 +12,10 @@ export const createApplication = async (
 
     const {
       bountyId,
-      applicantId,
       coverLetter,
     } = req.body;
+
+    const applicantId = req.user.id;
 
     const result =
       await pool.query(
@@ -212,9 +213,8 @@ export const acceptApplication = async (
     await pool.query(
 
       `
-      UPDATE applications
-  SET
-    status = 'Completed',
+    UPDATE applications
+    SET status = 'accepted',
     completed_at = NOW()
   WHERE id = $1
       `,
@@ -398,13 +398,14 @@ export const submitPR =
         await pool.query(
 
           `
-          UPDATE applications
-          SET
-            pr_url = $1,
-            pr_number = $2
-          WHERE id = $3
+         UPDATE applications
+SET
+  pr_url = $1,
+  pr_number = $2,
+  status = 'PR Submitted'
+WHERE id = $3
 
-          RETURNING *
+RETURNING *
           `,
 
           [
@@ -414,6 +415,35 @@ export const submitPR =
           ]
 
         );
+
+        const application =
+await pool.query(
+
+`
+SELECT
+  a.applicant_id,
+  b.owner_id,
+  b.title
+
+FROM applications a
+
+JOIN bounties b
+ON a.bounty_id = b.id
+
+WHERE a.id = $1
+`,
+
+[applicationId]
+
+);
+
+await createNotification(
+
+application.rows[0].owner_id,
+
+`A pull request has been submitted for "${application.rows[0].title}"`
+
+);
 
       res.json(
         result.rows[0]
@@ -429,6 +459,8 @@ export const submitPR =
       });
 
     }
+
+    
 
 };
 
@@ -516,8 +548,10 @@ const response =
 
           `
           UPDATE applications
-          SET status = 'Completed'
-          WHERE id = $1
+SET
+  status = 'Completed',
+  completed_at = NOW()
+WHERE id = $1
           `,
 
           [applicationId]
@@ -537,6 +571,14 @@ const response =
           [app.bounty_id]
 
         );
+
+        await createNotification(
+
+app.applicant_id,
+
+"🎉 Congratulations! Your pull request has been merged."
+
+);
 
       }
 
