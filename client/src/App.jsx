@@ -20,7 +20,7 @@ import MyBounties from "./pages/myBounties";
 import ConnectedRepositories from "./pages/connectedRepositories";
 import RepositoryIssues from "./pages/repositoryIssues";
 import AuthSuccess from "./pages/AuthSucess";
-import Profile from "./pages/Profile";
+import Profile from "./pages/profile";
 
 function App() {
 
