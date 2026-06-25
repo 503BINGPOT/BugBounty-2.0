@@ -1,10 +1,10 @@
-import Layout from "../components/layout/Layout";
+import Layout from "../components/layout/layout";
 
 import Hero from "../components/sections/Hero";
 import Stats from "../components/sections/Stats";
 import HowItWorks from "../components/sections/HowItWorks";
-import FeaturedBounties from "../components/sections/FeaturedBounties";
-import Benefits from "../components/sections/Benefits";
+import FeaturedBounties from "../components/sections/featuredBounties";
+import Benefits from "../components/sections/benefits";
 
 const Home = () => {
   return (

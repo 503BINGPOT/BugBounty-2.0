@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "axios";
 
-import Layout from "../components/layout/Layout";
+import Layout from "../components/layout/layout";
 
 const RepositoryIssues = () => {
 
