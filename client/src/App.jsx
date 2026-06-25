@@ -7,12 +7,12 @@ import {
 import Navbar from "./components/layout/Navbar";
 
 import Home from "./pages/Home";
-import Login from "./pages/Login";
-import Register from "./pages/Register";
-import Dashboard from "./pages/Dashboard";
-import Wallet from "./pages/Wallet";
-import Bounties from "./pages/Bounties";
-import CompleteProfile from "./pages/CompleteProfile";
+import Login from "./pages/login";
+import Register from "./pages/register";
+import Dashboard from "./pages/dashboard";
+import Wallet from "./pages/wallet";
+import Bounties from "./pages/bounties";
+import CompleteProfile from "./pages/completeProfile";
 import PostBounty from "./pages/PostBounty";
 import BountyDetails from "./pages/BountyDetails";
 import MyApplications from "./pages/MyApplication";
