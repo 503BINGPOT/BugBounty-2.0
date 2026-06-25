@@ -26,7 +26,7 @@ passport.use(
         process.env.GITHUB_CLIENT_SECRET,
 
       callbackURL:
-        "http://localhost:5000/api/auth/github/callback",
+        "${import.meta.env.VITE_API_URL}/api/auth/github/callback",
     },
 
     async (

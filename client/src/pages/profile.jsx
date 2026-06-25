@@ -31,7 +31,7 @@ const Profile = () => {
           const response =
             await axios.get(
 
-              `http://localhost:5000/api/profile/stats/${user.id}`
+              `${import.meta.env.VITE_API_URL}/api/profile/stats/${user.id}`
 
             );
 
@@ -42,7 +42,7 @@ const Profile = () => {
           const applications =
   await axios.get(
 
-    `http://localhost:5000/api/applications/user/${user.id}`
+    `${import.meta.env.VITE_API_URL}/api/applications/user/${user.id}`
 
   );
 

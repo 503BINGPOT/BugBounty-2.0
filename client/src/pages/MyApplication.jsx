@@ -28,7 +28,7 @@ useState({});
 
 const response =
   await axios.get(
-    `http://localhost:5000/api/applications/user/${currentUser.id}`,
+    `${import.meta.env.VITE_API_URL}/api/applications/user/${currentUser.id}`,
     {
       headers: {
         Authorization: `Bearer ${token}`,
@@ -61,7 +61,7 @@ const response =
 
 await axios.put(
 
-  "http://localhost:5000/api/applications/submit-pr",
+  "${import.meta.env.VITE_API_URL}/api/applications/submit-pr",
 
   {
     applicationId,

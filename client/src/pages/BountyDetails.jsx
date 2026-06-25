@@ -50,7 +50,7 @@ const handleUpdate = async () => {
     const token = localStorage.getItem("token");
 
     const response = await axios.put(
-      `http://localhost:5000/api/bounties/${id}`,
+      `${import.meta.env.VITE_API_URL}/api/bounties/${id}`,
       formData,
       {
         headers: {
@@ -80,7 +80,7 @@ const handleUpdate = async () => {
 
         const bountyResponse =
           await axios.get(
-            `http://localhost:5000/api/bounties/${id}`
+            `${import.meta.env.VITE_API_URL}/api/bounties/${id}`
           );
 
         setBounty(
@@ -102,7 +102,7 @@ const handleUpdate = async () => {
         const applicationsResponse =
           await axios.get(
 
-            `http://localhost:5000/api/applications/${id}`,
+            `${import.meta.env.VITE_API_URL}/api/applications/${id}`,
 
             {
               headers: {
@@ -162,7 +162,7 @@ setHasApplied(
 const response =
   await axios.post(
 
-    "http://localhost:5000/api/applications",
+    "${import.meta.env.VITE_API_URL}/api/applications",
 
     {
       bountyId: bounty.id,
@@ -214,7 +214,7 @@ const response =
 
       await axios.put(
 
-        `http://localhost:5000/api/applications/accept/${applicationId}`,
+        `${import.meta.env.VITE_API_URL}/api/applications/accept/${applicationId}`,
 
         {},
 
@@ -261,7 +261,7 @@ const handleReject =
 
       await axios.put(
 
-        `http://localhost:5000/api/applications/reject/${applicationId}`,
+        `${import.meta.env.VITE_API_URL}/api/applications/reject/${applicationId}`,
 
         {},
 
@@ -304,7 +304,7 @@ async (applicationId) => {
     const response =
       await axios.get(
 
-        `http://localhost:5000/api/applications/check-pr/${applicationId}`,
+        `${import.meta.env.VITE_API_URL}/api/applications/check-pr/${applicationId}`,
 
         {
 
@@ -363,7 +363,7 @@ const handlePayment =
       const order =
         await axios.post(
 
-          "http://localhost:5000/api/payment/create-order",
+          "${import.meta.env.VITE_API_URL}/api/payment/create-order",
 
           {
             amount:
@@ -398,7 +398,7 @@ const handlePayment =
 
             await axios.post(
 
-              "http://localhost:5000/api/payment/verify",
+              "${import.meta.env.VITE_API_URL}/api/payment/verify",
 
               {
 

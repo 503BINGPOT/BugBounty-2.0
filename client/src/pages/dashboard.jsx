@@ -28,7 +28,7 @@ useEffect(() => {
         const response =
           await axios.get(
 
-            `http://localhost:5000/api/dashboard/stats/${user.id}`
+            `${import.meta.env.VITE_API_URL}/api/dashboard/stats/${user.id}`
 
           );
 

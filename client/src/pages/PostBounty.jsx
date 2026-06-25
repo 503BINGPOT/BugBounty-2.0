@@ -46,7 +46,7 @@ const token = localStorage.getItem("token");
     const response =
   await axios.post(
 
-    "http://localhost:5000/api/bounties",
+    "${import.meta.env.VITE_API_URL}/api/bounties",
 
     payload,
 

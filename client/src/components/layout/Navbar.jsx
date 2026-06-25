@@ -76,7 +76,7 @@ const [showNotifications,
 
         const response =
           await axios.get(
-            `http://localhost:5000/api/notifications/${user.id}`
+            `${import.meta.env.VITE_API_URL}/api/notifications/${user.id}`
           );
 
         setNotifications(

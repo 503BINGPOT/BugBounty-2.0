@@ -24,7 +24,7 @@ const MyBounties = () => {
           const response =
             await axios.get(
 
-              `http://localhost:5000/api/bounties/owner/${currentUser.id}`
+              `${import.meta.env.VITE_API_URL}/api/bounties/owner/${currentUser.id}`
 
             );
 

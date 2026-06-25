@@ -24,7 +24,7 @@ const ConnectedRepositories = () => {
           const response =
             await axios.get(
 
-              `http://localhost:5000/api/github/repos/${currentUser.id}`
+              `${import.meta.env.VITE_API_URL}/api/github/repos/${currentUser.id}`
 
             );
 
@@ -51,7 +51,7 @@ const ConnectedRepositories = () => {
 
         await axios.post(
 
-          "http://localhost:5000/api/github/connect-repo",
+          "${import.meta.env.VITE_API_URL}/api/github/connect-repo",
 
           {
             userId:

@@ -233,7 +233,7 @@ const Login = () => {
   type="button"
   onClick={() => {
     window.location.href =
-      "http://localhost:5000/api/auth/github";
+      "${import.meta.env.VITE_API_URL}/api/auth/github";
   }}
   className="
     w-full
@@ -315,7 +315,7 @@ const Login = () => {
             onClick={() => {
 
               window.location.href =
-                "http://localhost:5000/api/auth/github";
+                "${import.meta.env.VITE_API_URL}/api/auth/github";
 
             }}
 

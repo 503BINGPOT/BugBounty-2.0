@@ -44,7 +44,7 @@ const [acceptanceCriteria,
           const response =
             await axios.get(
 
-              `http://localhost:5000/api/github/issues/${owner}/${repo}`
+              `${import.meta.env.VITE_API_URL}/api/github/issues/${owner}/${repo}`
 
             );
 
@@ -71,7 +71,7 @@ const [acceptanceCriteria,
 
       await axios.post(
 
-        "http://localhost:5000/api/github/import-issue",
+        "${import.meta.env.VITE_API_URL}/api/github/import-issue",
 
         {
           title:

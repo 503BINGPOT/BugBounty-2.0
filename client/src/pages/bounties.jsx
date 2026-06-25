@@ -24,14 +24,11 @@ const Bounties = () => {
 
       try {
 
-        const response =
-          await axios.get(
-            "http://localhost:5000/api/bounties"
-          );
+        const response = await axios.get(
+  `${import.meta.env.VITE_API_URL}/api/bounties`
+);
 
-        setBounties(
-          response.data
-        );
+setBounties(response.data);
 
       } catch (error) {
 
