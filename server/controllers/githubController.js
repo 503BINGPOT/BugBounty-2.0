@@ -236,7 +236,7 @@ export const githubWebhook = async (req, res) => {
 
     const payload = req.body;
 
-    // Only react when a Pull Request is merged
+    // Ignore everything except merged PRs
     if (
       payload.action !== "closed" ||
       !payload.pull_request?.merged
@@ -244,33 +244,44 @@ export const githubWebhook = async (req, res) => {
       return res.sendStatus(200);
     }
 
-    const prUrl = payload.pull_request.html_url;
+    const prNumber = payload.pull_request.number;
 
-    // Find the application using this PR URL
-    const application = await pool.query(
+    // Find application
+    const application =
+      await pool.query(
 
-      `
-      SELECT *
-      FROM applications
-      WHERE pr_url = $1
-      `,
+        `
+        SELECT *
+        FROM applications
+        WHERE pr_number = $1
+        `,
 
-      [prUrl]
+        [prNumber]
 
-    );
+      );
 
-    if (application.rows.length === 0) {
+    if (
+      application.rows.length === 0
+    ) {
+
       return res.sendStatus(200);
+
     }
 
-    const app = application.rows[0];
+    const app =
+      application.rows[0];
 
-    // Mark application as completed
+    // Complete application
     await pool.query(
 
       `
       UPDATE applications
-      SET status = 'Completed'
+
+      SET
+
+        status = 'Completed',
+        completed_at = NOW()
+
       WHERE id = $1
       `,
 
@@ -278,14 +289,17 @@ export const githubWebhook = async (req, res) => {
 
     );
 
-    // Mark bounty as completed
+    // Complete bounty
     await pool.query(
 
       `
       UPDATE bounties
+
       SET
+
         status = 'Completed',
         completed_at = NOW()
+
       WHERE id = $1
       `,
 
@@ -293,7 +307,41 @@ export const githubWebhook = async (req, res) => {
 
     );
 
-    console.log("Webhook processed successfully");
+    // Get owner + applicant
+    const bounty =
+      await pool.query(
+
+        `
+        SELECT
+          owner_id,
+          title
+        FROM bounties
+        WHERE id = $1
+        `,
+
+        [app.bounty_id]
+
+      );
+
+    await createNotification(
+
+      app.applicant_id,
+
+      `🎉 Your pull request was merged for "${bounty.rows[0].title}"`
+
+    );
+
+    await createNotification(
+
+      bounty.rows[0].owner_id,
+
+      `✅ Bounty "${bounty.rows[0].title}" has been completed.`
+
+    );
+
+    console.log(
+      "Webhook processed successfully"
+    );
 
     res.sendStatus(200);
 

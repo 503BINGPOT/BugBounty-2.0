@@ -293,68 +293,6 @@ const handleReject =
 
 };
 
-const checkPRStatus =
-async (applicationId) => {
-
-  try {
-
-    const token =
-      localStorage.getItem("token");
-
-    const response =
-      await axios.get(
-
-        `${import.meta.env.VITE_API_URL}/api/applications/check-pr/${applicationId}`,
-
-        {
-
-          headers:{
-
-            Authorization:
-            `Bearer ${token}`
-
-          }
-
-        }
-
-      );
-
-   if(response.data.merged){
-
-  alert("PR Merged!");
-
-  setApplications((prev) =>
-    prev.map((application) =>
-      application.id === applicationId
-        ? {
-            ...application,
-            status: "completed",
-          }
-        : application
-    )
-  );
-
-  setBounty((prev) => ({
-    ...prev,
-    status: "completed",
-  }));
-
-}else{
-
-  alert("PR not merged yet.");
-
-}
-
-  }
-
-  catch(error){
-
-    console.log(error);
-
-  }
-
-};
-
 const handlePayment =
   async () => {
 
@@ -939,37 +877,6 @@ application.status === "Pending"
             }
 
 
-{
-application.status ===
-"PR Submitted" && (
-
-<div className="mt-4">
-
-<button
-
-onClick={()=>
-checkPRStatus(
-application.id
-)
-}
-
-className="
-bg-purple-600
-px-4
-py-2
-rounded-lg
-"
-
->
-
-Check PR Status
-
-</button>
-
-</div>
-
-)
-}
 
 {
 application.status === "Accepted" && (

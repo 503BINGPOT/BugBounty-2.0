@@ -9,7 +9,6 @@ import {
   rejectApplication,
   getUserApplications,
   submitPR,
-  checkPRStatus
 } from "../controllers/applicationController.js";
 
 const router = express.Router();
@@ -47,12 +46,6 @@ router.put(
   "/submit-pr",
   authMiddleware,
   submitPR
-);
-
-router.get(
-  "/check-pr/:applicationId",
-  authMiddleware,
-  checkPRStatus
 );
 
 export default router;
