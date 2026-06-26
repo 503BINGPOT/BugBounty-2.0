@@ -5,6 +5,7 @@ import {
   connectRepository,
   getRepositoryIssues,
   importIssueAsBounty,
+    githubWebhook,
 } from "../controllers/githubController.js";
 
 const router =
@@ -28,6 +29,11 @@ router.get(
 router.post(
   "/import-issue",
   importIssueAsBounty
+);
+
+router.post(
+  "/webhook",
+  githubWebhook
 );
 
 export default router;

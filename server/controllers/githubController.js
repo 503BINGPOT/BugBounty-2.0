@@ -229,3 +229,80 @@ export const importIssueAsBounty =
     }
 
 };
+
+export const githubWebhook = async (req, res) => {
+
+  try {
+
+    const payload = req.body;
+
+    // Only react when a Pull Request is merged
+    if (
+      payload.action !== "closed" ||
+      !payload.pull_request?.merged
+    ) {
+      return res.sendStatus(200);
+    }
+
+    const prUrl = payload.pull_request.html_url;
+
+    // Find the application using this PR URL
+    const application = await pool.query(
+
+      `
+      SELECT *
+      FROM applications
+      WHERE pr_url = $1
+      `,
+
+      [prUrl]
+
+    );
+
+    if (application.rows.length === 0) {
+      return res.sendStatus(200);
+    }
+
+    const app = application.rows[0];
+
+    // Mark application as completed
+    await pool.query(
+
+      `
+      UPDATE applications
+      SET status = 'Completed'
+      WHERE id = $1
+      `,
+
+      [app.id]
+
+    );
+
+    // Mark bounty as completed
+    await pool.query(
+
+      `
+      UPDATE bounties
+      SET
+        status = 'Completed',
+        completed_at = NOW()
+      WHERE id = $1
+      `,
+
+      [app.bounty_id]
+
+    );
+
+    console.log("Webhook processed successfully");
+
+    res.sendStatus(200);
+
+  } catch (error) {
+
+    console.log(error);
+
+    res.sendStatus(500);
+
+  }
+
+};
