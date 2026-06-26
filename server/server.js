@@ -28,7 +28,7 @@ app.use(
   cors({
     origin: [
       "http://localhost:5173",
-      "http://localhost:5174",
+      "https://bug-bounty-2-0-x2a7.vercel.app",
     ],
     credentials: true,
   })
