@@ -243,8 +243,12 @@ export const githubWebhook = async (req, res) => {
     ) {
       return res.sendStatus(200);
     }
+    console.log("Webhook hit");
+console.log("Action:", payload.action);
+console.log("Merged:", payload.pull_request?.merged);
 
     const prNumber = payload.pull_request.number;
+    console.log("PR Number:", prNumber);
 
     // Find application
     const application =
@@ -259,6 +263,9 @@ export const githubWebhook = async (req, res) => {
         [prNumber]
 
       );
+
+      console.log("Applications found:", application.rows.length);
+console.log(application.rows);
 
     if (
       application.rows.length === 0

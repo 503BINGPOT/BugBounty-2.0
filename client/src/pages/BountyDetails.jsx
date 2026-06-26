@@ -877,6 +877,37 @@ application.status === "Pending"
             }
 
 
+{
+application.status ===
+"PR Submitted" && (
+
+<div className="mt-4">
+
+<button
+
+onClick={()=>
+checkPRStatus(
+application.id
+)
+}
+
+className="
+bg-purple-600
+px-4
+py-2
+rounded-lg
+"
+
+>
+
+Check PR Status
+
+</button>
+
+</div>
+
+)
+}
 
 {
 application.status === "Accepted" && (
