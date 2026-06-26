@@ -75,10 +75,8 @@ router.get(
         );
 
         return res.redirect(
-
-          `http://localhost:5173/auth-success?token=${token}`
-
-        );
+  `${process.env.FRONTEND_URL}/auth-success?token=${token}`
+);
 
       }
 
@@ -113,7 +111,7 @@ router.get(
 
       return res.redirect(
 
-        `http://localhost:5173/complete-profile?token=${tempToken}`
+        `${process.env.FRONTEND_URL}/complete-profile?token=${tempToken}`
 
       );
 
