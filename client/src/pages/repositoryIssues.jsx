@@ -71,7 +71,7 @@ const [acceptanceCriteria,
 
       await axios.post(
 
-        "${import.meta.env.VITE_API_URL}/api/github/import-issue",
+        `${import.meta.env.VITE_API_URL}/api/github/import-issue`,
 
         {
           title:

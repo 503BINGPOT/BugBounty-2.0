@@ -162,7 +162,7 @@ setHasApplied(
 const response =
   await axios.post(
 
-    "${import.meta.env.VITE_API_URL}/api/applications",
+    `${import.meta.env.VITE_API_URL}/api/applications`,
 
     {
       bountyId: bounty.id,
@@ -363,7 +363,7 @@ const handlePayment =
       const order =
         await axios.post(
 
-          "${import.meta.env.VITE_API_URL}/api/payment/create-order",
+          `${import.meta.env.VITE_API_URL}/api/payment/create-order`,
 
           {
             amount:
@@ -398,7 +398,7 @@ const handlePayment =
 
             await axios.post(
 
-              "${import.meta.env.VITE_API_URL}/api/payment/verify",
+              `${import.meta.env.VITE_API_URL}/api/payment/verify`,
 
               {
 

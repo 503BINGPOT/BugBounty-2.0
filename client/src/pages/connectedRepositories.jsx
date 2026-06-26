@@ -51,7 +51,7 @@ const ConnectedRepositories = () => {
 
         await axios.post(
 
-          "${import.meta.env.VITE_API_URL}/api/github/connect-repo",
+          `${import.meta.env.VITE_API_URL}/api/github/connect-repo`,
 
           {
             userId:

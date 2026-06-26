@@ -61,7 +61,7 @@ const response =
 
 await axios.put(
 
-  "${import.meta.env.VITE_API_URL}/api/applications/submit-pr",
+  `${import.meta.env.VITE_API_URL}/api/applications/submit-pr`,
 
   {
     applicationId,
