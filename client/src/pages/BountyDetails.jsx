@@ -293,6 +293,68 @@ const handleReject =
 
 };
 
+const checkPRStatus =
+async (applicationId) => {
+
+  try {
+
+    const token =
+      localStorage.getItem("token");
+
+    const response =
+      await axios.get(
+
+        `${import.meta.env.VITE_API_URL}/api/applications/check-pr/${applicationId}`,
+
+        {
+
+          headers:{
+
+            Authorization:
+            `Bearer ${token}`
+
+          }
+
+        }
+
+      );
+
+   if(response.data.merged){
+
+  alert("PR Merged!");
+
+  setApplications((prev) =>
+    prev.map((application) =>
+      application.id === applicationId
+        ? {
+            ...application,
+            status: "completed",
+          }
+        : application
+    )
+  );
+
+  setBounty((prev) => ({
+    ...prev,
+    status: "completed",
+  }));
+
+}else{
+
+  alert("PR not merged yet.");
+
+}
+
+  }
+
+  catch(error){
+
+    console.log(error);
+
+  }
+
+};
+
 const handlePayment =
   async () => {
 
