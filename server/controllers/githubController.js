@@ -236,6 +236,10 @@ export const githubWebhook = async (req, res) => {
 
     const payload = req.body;
 
+    console.log("Action:", payload.action);
+console.log("Merged:", payload.pull_request?.merged);
+console.log("PR Number:", payload.pull_request?.number);
+
     // Ignore everything except merged PRs
     if (
       payload.action !== "closed" ||
@@ -253,6 +257,7 @@ console.log("Merged:", payload.pull_request?.merged);
     // Find application
     const application =
       await pool.query(
+
 
         `
         SELECT *
