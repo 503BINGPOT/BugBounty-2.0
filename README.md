@@ -1,201 +1,175 @@
-# BugBounty 2.0
+# 🐞 BugBounty – Open Source Bounty Platform
 
-An open-source bounty platform that connects project owners with contributors by turning GitHub issues into incentivized development tasks.
+BugBounty is a full-stack web application that connects open-source project maintainers with developers by allowing maintainers to post monetary bounties on GitHub issues and contributors to apply, submit pull requests, and earn rewards.
 
-## Overview
-
-BugBounty 2.0 allows repository owners to create and manage bounties for open-source issues while enabling contributors to apply, submit pull requests, and complete tasks through a GitHub-integrated workflow.
-
-The platform automates the journey from issue discovery to contribution verification, making open-source collaboration more transparent and rewarding.
+The platform streamlines the collaboration workflow by integrating GitHub repositories, issue importing, contributor applications, and secure payment processing.
 
 ---
 
-## Features
+## 🚀 Features
 
-### Authentication & Security
+### 🔐 Authentication & Authorization
 
 * JWT-based authentication
-* Password hashing with bcrypt
-* GitHub OAuth integration
+* Secure password hashing using bcrypt
+* GitHub OAuth login
 * Role-based access control
-* Secure user sessions
 
-### Bounty Management
+  * Project Owner
+  * Contributor
 
-* Create, update, delete, and manage bounties
-* Set reward amount and difficulty level
+### 👤 User Dashboard
+
+* Personalized dashboard
+* View posted bounties
+* Track submitted applications
+* Manage ongoing contributions
+* Notification system for important updates
+
+### 💰 Bounty Management
+
+* Create, edit and delete bounties
+* Set reward amount
+* Select difficulty level
 * Define acceptance criteria
 * Track bounty status
-* Manage contributor applications
 
-### GitHub Integration
+### 📝 GitHub Integration
 
-* GitHub OAuth login
-* Repository linking
-* Fetch user repositories
-* Import GitHub issues as bounties
-* Pull Request URL submission
-* Pull Request merge verification using GitHub API
+* Connect GitHub account
+* Import GitHub repositories
+* Fetch repository issues
+* Convert GitHub issues into platform bounties
+* Submit Pull Request links for review
+* Webhook handling for pull request events
 
-### Contributor Workflow
+### 🤝 Contributor Workflow
 
 * Browse available bounties
 * Apply for bounties
-* Submit cover letters
+* Submit Pull Request URLs
 * Track application status
-* Submit Pull Requests
-* Automatic completion tracking after PR verification
+* Receive notifications on acceptance and completion
 
-### Application Management
+### 💳 Payment Integration
 
-* Accept contributor applications
-* Reject contributor applications
-* Automatic rejection of competing applications after acceptance
-* Application history tracking
+* Razorpay payment gateway integration
+* Secure payment verification
+* Bounty funding workflow
+
+### 📊 Admin & Analytics
+
+* Dashboard statistics
+* Active bounty tracking
+* Contributor activity overview
+* Repository management
 
 ---
 
-## Tech Stack
+## 🛠 Tech Stack
 
 ### Frontend
 
 * React
-* React Router
+* Vite
 * Tailwind CSS
+* React Router
 * Axios
 
 ### Backend
 
 * Node.js
 * Express.js
-* Passport.js
-* JWT
+* PostgreSQL (Neon)
+* JWT Authentication
 * bcrypt
-
-### Database
-
-* PostgreSQL
-
-### APIs & Integrations
-
+* Passport.js
 * GitHub OAuth
+
+### APIs & Services
+
 * GitHub REST API
-
----
-
-## Database Entities
-
-### Users
-
-* Authentication
-* GitHub profile linking
-* Roles (Contributor / Project Owner)
-
-### Bounties
-
-* Reward
-* Difficulty
-* Acceptance Criteria
-* GitHub Issue Reference
-* Status Tracking
-
-### Applications
-
-* Cover Letter
-* Application Status
-* Pull Request Tracking
-* Completion Timestamp
-
-### Repositories
-
-* Connected GitHub Repositories
-* Repository Metadata
-
----
-
-## Workflow
-
-1. Sign in using Email/Password or GitHub OAuth
-2. Connect GitHub Repository
-3. Import GitHub Issues as Bounties
-4. Contributors Apply for Bounties
-5. Project Owner Accepts an Application
-6. Contributor Submits Pull Request
-7. Platform Verifies Pull Request Status
-8. Bounty Marked as Completed after Successful Merge
-
----
-
-## Current Status
-
-### Implemented
-
-* Authentication
-* GitHub OAuth
-* Repository Linking
-* Issue Import
-* Bounty Management
-* Contributor Applications
-* Pull Request Submission
-* Pull Request Verification
-* Completion Tracking
-
-### Planned
-
 * GitHub Webhooks
-* Razorpay Integration
-* Contributor Leaderboards
-* Analytics Dashboard
-* Automated Payment Release
+* Razorpay Payment Gateway
 
 ---
 
-## Installation
+## 📂 Project Structure
 
-### Clone Repository
-
-```bash
-git clone https://github.com/503BINGPOT/BugBounty-2.0.git
+```
+BugBounty/
+│
+├── client/
+│   ├── components/
+│   ├── pages/
+│   ├── context/
+│   ├── services/
+│   └── assets/
+│
+├── server/
+│   ├── controllers/
+│   ├── routes/
+│   ├── middleware/
+│   ├── config/
+│   └── database/
+│
+└── README.md
 ```
 
-### Install Client
+---
+
+## ⚙️ Installation
+
+### Clone the repository
+
+```bash
+git clone https://github.com/your-username/BugBounty.git
+cd BugBounty
+```
+
+### Install dependencies
+
+Frontend
 
 ```bash
 cd client
 npm install
 ```
 
-### Install Server
+Backend
 
 ```bash
 cd server
 npm install
 ```
 
-### Environment Variables
+### Configure Environment Variables
 
-Create a `.env` file inside the server directory:
+Create a `.env` file inside the server directory.
+
+Example:
 
 ```env
-PORT=5000
+DATABASE_URL=
+JWT_SECRET=
 
-JWT_SECRET=your_secret
+GITHUB_CLIENT_ID=
+GITHUB_CLIENT_SECRET=
+GITHUB_CALLBACK_URL=
 
-GITHUB_CLIENT_ID=your_client_id
-GITHUB_CLIENT_SECRET=your_client_secret
-
-DATABASE_URL=your_database_url
+RAZORPAY_KEY_ID=
+RAZORPAY_KEY_SECRET=
 ```
 
-### Start Development Servers
+### Start the application
 
-Backend:
+Backend
 
 ```bash
 npm run dev
 ```
 
-Frontend:
+Frontend
 
 ```bash
 npm run dev
@@ -203,20 +177,49 @@ npm run dev
 
 ---
 
-## Future Enhancements
+## Workflow
 
-* GitHub Webhook Integration
-* Escrow-Based Payments
-* Automated Reward Distribution
-* Contributor Reputation System
-* Repository Analytics
-* Activity Feed
-* Team Collaboration Features
+1. User registers or signs in with GitHub.
+2. Project owner connects a GitHub repository.
+3. Repository issues are imported as bounties.
+4. Contributors browse and apply for bounties.
+5. Owners accept contributor applications.
+6. Contributors submit Pull Request links.
+7. GitHub webhook events are processed to support the bounty workflow.
+8. Notifications and payment flow keep both parties updated throughout the contribution lifecycle.
 
 ---
 
-## Author
+## Future Improvements
 
-Dhruv Mantri
+* Escrow-based automatic reward release
+* GitHub Checks API integration
+* Real-time notifications using WebSockets
+* In-app messaging
+* Multi-maintainer support
+* Advanced contributor reputation system
+* Leaderboards and badges
+* Email notifications
+* Search and filtering enhancements
 
-GitHub: https://github.com/503BINGPOT
+---
+
+## Learning Outcomes
+
+This project helped strengthen practical experience with:
+
+* Full-stack application development
+* REST API design
+* PostgreSQL database modeling
+* Authentication and authorization
+* OAuth integration
+* GitHub API integration
+* Payment gateway integration
+* Webhook handling
+* Deployment-ready backend architecture
+
+---
+
+## License
+
+This project is developed for learning and portfolio purposes.
