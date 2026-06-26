@@ -19,152 +19,174 @@ The platform simplifies the entire collaboration lifecycle by integrating GitHub
 
 ---
 
-## ✨ Features
+## 🚀 Key Features
 
-- 🔐 JWT Authentication & GitHub OAuth
-- 🏆 Create and manage bug bounties
-- 📂 Connect GitHub repositories
-- 📥 Import GitHub Issues as bounties
-- 👨‍💻 Contributor application system
-- ✅ Accept/Reject contributor applications
-- 🔗 Pull Request submission workflow
-- 🔔 Real-time notification system
-- 💳 Razorpay payment integration
-- 📊 Personalized dashboards
-- 🌙 Responsive modern UI
+### 🔐 Authentication & User Management
 
----
+* Secure JWT-based authentication
+* Password encryption using bcrypt
+* GitHub OAuth integration for seamless sign-in
+* Role-based access control for Project Owners and Contributors
+* Persistent user sessions
 
-🚀 Key Features
-🔐 Authentication & User Management
-Secure JWT-based authentication
-Password encryption using bcrypt
-GitHub OAuth integration for seamless sign-in
-Role-based access control for Project Owners and Contributors
-Persistent user sessions
-📂 GitHub Integration
-Connect personal GitHub account
-Fetch and display user repositories
-Import GitHub Issues directly as platform bounties
-Maintain repository associations
-Submit GitHub Pull Request links for completed work
-Webhook handling for pull request events
-💰 Bounty Management
+### 📂 GitHub Integration
+
+* Connect personal GitHub account
+* Fetch and display user repositories
+* Import GitHub Issues directly as platform bounties
+* Maintain repository associations
+* Submit GitHub Pull Request links for completed work
+* Webhook handling for pull request events
+
+### 💰 Bounty Management
 
 Project owners can:
 
-Create custom bounties
-Import existing GitHub issues
-Define reward amount
-Specify difficulty level
-Add detailed acceptance criteria
-Track bounty progress
-Manage active and completed bounties
-👨‍💻 Contributor Workflow
+* Create custom bounties
+* Import existing GitHub issues
+* Define reward amount
+* Specify difficulty level
+* Add detailed acceptance criteria
+* Track bounty progress
+* Manage active and completed bounties
+
+### 👨‍💻 Contributor Workflow
 
 Contributors can:
 
-Browse available bounties
-View project details
-Apply for bounties
-Track application status
-Submit Pull Request links
-Receive completion notifications
-🤝 Application Management
+* Browse available bounties
+* View project details
+* Apply for bounties
+* Track application status
+* Submit Pull Request links
+* Receive completion notifications
+
+### 🤝 Application Management
 
 Project owners can:
 
-Review contributor applications
-Accept or reject applicants
-Monitor submitted pull requests
-Track project completion status
-🔔 Notification System
+* Review contributor applications
+* Accept or reject applicants
+* Monitor submitted pull requests
+* Track project completion status
+
+### 🔔 Notification System
 
 The platform automatically generates notifications for important events including:
 
-Application accepted
-Application rejected
-Pull Request submitted
-Pull Request completion
-Bounty status updates
-💳 Payment Integration
-Razorpay payment gateway integration
-Secure payment verification
-Reward funding workflow
-Payment status tracking
-📊 Dashboard & Analytics
+* Application accepted
+* Application rejected
+* Pull Request submitted
+* Pull Request completion
+* Bounty status updates
+
+### 💳 Payment Integration
+
+* Razorpay payment gateway integration
+* Secure payment verification
+* Reward funding workflow
+* Payment status tracking
+
+### 📊 Dashboard & Analytics
 
 Users have access to personalized dashboards displaying:
 
-Posted bounties
-Applied bounties
-Active projects
-Completed work
-Overall platform activity
-🛠 Tech Stack
-Frontend
-React
-Vite
-Tailwind CSS
-React Router
-Axios
-Backend
-Node.js
-Express.js
-PostgreSQL (Neon)
-JWT Authentication
-bcrypt
-Passport.js
-GitHub OAuth
-APIs & Services
-GitHub REST API
-GitHub Webhooks
-Razorpay Payment Gateway
-⚙️ Workflow
-Users register using email/password or GitHub OAuth.
-Project owners connect one or more GitHub repositories.
-Existing GitHub issues can be imported directly as bounties or new bounties can be created manually.
-Contributors browse open bounties and submit applications.
-Project owners review applications and select contributors.
-Contributors work on the assigned issue and submit their GitHub Pull Request link.
-The platform tracks the contribution workflow, updates application status, and keeps both parties informed through notifications.
-Once the contribution process is complete, the bounty is marked accordingly and the reward workflow is finalized through the integrated payment system.
-🎯 Project Highlights
-Full-stack MERN-style architecture with PostgreSQL
-Secure authentication and authorization
-Third-party OAuth integration
-GitHub API integration
-RESTful API design
-Relational database modeling
-Payment gateway integration
-Webhook-based event handling
-Responsive modern user interface
-Modular and scalable backend architecture
-📚 Learning Outcomes
+* Posted bounties
+* Applied bounties
+* Active projects
+* Completed work
+* Overall platform activity
+
+---
+
+## 🛠 Tech Stack
+
+### Frontend
+
+* React
+* Vite
+* Tailwind CSS
+* React Router
+* Axios
+
+### Backend
+
+* Node.js
+* Express.js
+* PostgreSQL (Neon)
+* JWT Authentication
+* bcrypt
+* Passport.js
+* GitHub OAuth
+
+### APIs & Services
+
+* GitHub REST API
+* GitHub Webhooks
+* Razorpay Payment Gateway
+
+---
+
+## ⚙️ Workflow
+
+1. Users register using email/password or GitHub OAuth.
+2. Project owners connect one or more GitHub repositories.
+3. Existing GitHub issues can be imported directly as bounties or new bounties can be created manually.
+4. Contributors browse open bounties and submit applications.
+5. Project owners review applications and select contributors.
+6. Contributors work on the assigned issue and submit their GitHub Pull Request link.
+7. The platform tracks the contribution workflow, updates application status, and keeps both parties informed through notifications.
+8. Once the contribution process is complete, the bounty is marked accordingly and the reward workflow is finalized through the integrated payment system.
+
+---
+
+## 🎯 Project Highlights
+
+* Full-stack MERN-style architecture with PostgreSQL
+* Secure authentication and authorization
+* Third-party OAuth integration
+* GitHub API integration
+* RESTful API design
+* Relational database modeling
+* Payment gateway integration
+* Webhook-based event handling
+* Responsive modern user interface
+* Modular and scalable backend architecture
+
+---
+
+## 📚 Learning Outcomes
 
 Building BugBounty provided hands-on experience with:
 
-Designing scalable full-stack applications
-Building secure authentication systems
-Working with relational databases
-Integrating third-party APIs
-Implementing OAuth authentication
-Managing asynchronous workflows
-Payment gateway integration
-Webhook processing
-REST API development
-Frontend state management
-End-to-end deployment of production-ready web applications
-🚀 Future Enhancements
-Escrow-based automatic bounty payouts
-Real-time messaging between maintainers and contributors
-Live notifications using WebSockets
-Contributor reputation and leaderboard system
-Search and filtering improvements
-Email notifications
-Multi-maintainer repository support
-Advanced analytics dashboard
-Mobile-responsive progressive web application (PWA)
-📄 License
+* Designing scalable full-stack applications
+* Building secure authentication systems
+* Working with relational databases
+* Integrating third-party APIs
+* Implementing OAuth authentication
+* Managing asynchronous workflows
+* Payment gateway integration
+* Webhook processing
+* REST API development
+* Frontend state management
+* End-to-end deployment of production-ready web applications
+
+---
+
+## 🚀 Future Enhancements
+
+* Escrow-based automatic bounty payouts
+* Real-time messaging between maintainers and contributors
+* Live notifications using WebSockets
+* Contributor reputation and leaderboard system
+* Search and filtering improvements
+* Email notifications
+* Multi-maintainer repository support
+* Advanced analytics dashboard
+* Mobile-responsive progressive web application (PWA)
+
+---
+
+## 📄 License
 
 This project was built for learning, portfolio, and demonstration purposes.
